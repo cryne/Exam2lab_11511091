@@ -1,12 +1,16 @@
 #include <iostream>
 #include <cstring>
 #include <string>
+#include <stdlib.h>
+#include <cstdlib>
 using std::cout;
 using std::cin;
 using std::endl;
 using std::string;
+using std::atoi;
 void incriptar(char*);
 void desincriptar(char*);
+void validar(char*);
 int main(int argc, char const *argv[])
 {
 	int opcion=0;
@@ -35,7 +39,7 @@ int main(int argc, char const *argv[])
 			while(opcion2==0){
 				char* palabra=new char[126];
 				cout<<"Ingrese lo que desea desincriptar"<<endl;
-				cout<<"Ejemplo: abc krod->desincriptado=hola"<<endl;
+				cout<<"Ejemplo: krod->desincriptado=hola"<<endl;
 				cin.ignore(126,'\n');	
 				cin.getline(palabra,126,'\n');
 				desincriptar(palabra);
@@ -46,7 +50,19 @@ int main(int argc, char const *argv[])
 		}
 		if (opcion==3)
 		{
-			/* code */
+			int opcion2=0;
+			while(opcion2==0){
+				char* palabra=new char[126];
+				cout<<"Ingrese el numero de la tarjeta que desea saber si es valido"<<endl;
+				cout<<"se el solicita al usuario que unicamente solo ingrese 16 numero sin ningun otro caracter que no sea numero"<<endl;
+				cout<<"ejemplo:8273123273510569"<<endl;
+				cin.ignore(126,'\n');	
+				cin.getline(palabra,126,'\n');
+				validar(palabra);
+				delete[] palabra;	
+				cout<<"desea continuar revisando mas tarjetas\n0-si\n1-no"<<endl;	
+				cin>>opcion2;
+			}
 		}
 	}
 	return 0;
@@ -109,4 +125,33 @@ void desincriptar(char* palabra){
 		}
 	}
 	cout<<"desincriptacion: "<<incriptado<<endl;
+}
+void validar(char* palabra){
+	int acumulado=0;
+	for (int i = 16; i >= 0;--i)
+	{
+		if (i%2==0)
+		{
+			string y="";
+			y.push_back(palabra[i]);
+			int x=2*atoi(y.c_str());
+
+			if(x>9){
+				x=x-9;
+			}
+			acumulado=acumulado+x;
+		}else{
+			string y="";
+			y.push_back(palabra[i]);
+			int x=atoi(y.c_str());
+			acumulado=acumulado+x;
+		}
+	}
+	cout<<acumulado<<endl;
+	if (acumulado%10==0)
+	{
+		cout<<"codigo de tarjeta valido"<<endl;
+	}else{
+		cout<<"codigo de tarjeta no valido"<<endl;
+	}
 }
